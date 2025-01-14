@@ -1,0 +1,13 @@
+package ru.kata.spring.boot_security.demo.services;
+
+import ru.kata.spring.boot_security.demo.models.User;
+
+import java.util.List;
+
+public interface PersonService {
+    void saveUser(User user);
+    User findById(Long id);
+    void deleteById(Long id);
+    List<User> findAll();
+    User findByUsername(String username);
+}
