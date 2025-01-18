@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
+import java.util.Optional;
+
 @Controller
 public class UserController {
 
@@ -22,7 +24,7 @@ public class UserController {
     @GetMapping("/user")
     public String userHome(Authentication authentication, Model model) {
         String username = authentication.getName();
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).get();
         model.addAttribute("user", user);
         return "user";
     }

@@ -16,7 +16,7 @@
   <label>Roles:</label>
   <ul>
     <li th:each="role : ${roles}">
-      <input type="checkbox" th:name="role" th:value="${role.getId()}"
+      <input type="checkbox" th:name="roles" th:value="${role.getId()}"
              th:checked="${user.getAuthorities().contains(role)}">
       <span th:text="${role.getName()}"></span>
     </li>

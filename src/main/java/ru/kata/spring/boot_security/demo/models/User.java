@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.models;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -24,37 +25,35 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(String name, String surname, Set<Role> roles) {
+    public User(String name, String password, Set<Role> roles) {
         this.username = name;
-        this.password = surname;
+        this.password = password;
         this.roles = roles;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream()
-                .map(role -> (GrantedAuthority) role)
-                .collect(Collectors.toSet());
+        return roles;
     }
+
+    public void addRole(Role role) {roles.add(role);}
 
     public long getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(int id) {this.id = id;}
 
     @Override
     public String getUsername() {return username;}
@@ -65,6 +64,10 @@ public class User implements UserDetails {
     public String getPassword() {return password;}
 
     public void setPassword(String password) {this.password = password;}
+
+    public Set<Role> getRoles() {return roles;}
+
+    public void setRoles(Set<Role> roles) {this.roles = roles;}
 
     @Override
     public boolean isAccountNonExpired() {
