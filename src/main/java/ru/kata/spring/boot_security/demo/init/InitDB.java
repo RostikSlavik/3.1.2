@@ -6,8 +6,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.services.PersonService;
 import ru.kata.spring.boot_security.demo.services.RoleService;
+import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.annotation.PostConstruct;
 
@@ -18,14 +18,12 @@ import java.util.Set;
 public class InitDB {
 
     private final RoleService roleService;
-    private final PersonService personService;
-    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @Autowired
-    public InitDB(RoleService roleService, PersonService personService, PasswordEncoder passwordEncoder) {
+    public InitDB(RoleService roleService, UserService userService) {
         this.roleService = roleService;
-        this.personService = personService;
-        this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
     }
 
     @PostConstruct
@@ -42,13 +40,10 @@ public class InitDB {
             User admin = new User("admin", "admin", rolesAdmin);
             User user = new User("user", "user", rolesUser);
 
-            admin.setPassword(passwordEncoder.encode(admin.getPassword()));
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-
             roleService.saveRole(adminRole);
             roleService.saveRole(userRole);
-            personService.saveUser(admin);
-            personService.saveUser(user);
+            userService.saveUser(admin);
+            userService.saveUser(user);
 
         }
     }

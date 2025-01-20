@@ -11,18 +11,18 @@ import ru.kata.spring.boot_security.demo.services.*;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final PersonService personService;
+    private final UserService userService;
     private final RoleService roleService;
 
     @Autowired
-    public AdminController(PersonService personService, RoleService roleService) {
-        this.personService = personService;
+    public AdminController(UserService userService, RoleService roleService) {
+        this.userService = userService;
         this.roleService = roleService;
     }
 
     @GetMapping
     public String adminPage(Model model) {
-        model.addAttribute("users", personService.findAll());
+        model.addAttribute("users", userService.findAll());
         return "admin";
     }
 
@@ -35,13 +35,13 @@ public class AdminController {
 
     @PostMapping("/create")
     public String createUser(@ModelAttribute("user") User user) {
-        personService.saveUser(user);
+        userService.saveUser(user);
         return "redirect:/admin";
     }
 
     @GetMapping("/edit/{id}")
     public String editUserForm(@PathVariable("id") Long id, Model model) {
-        User user = personService.findById(id);
+        User user = userService.findById(id);
         model.addAttribute("user", user);
         model.addAttribute("roles", roleService.findAll());
         return "edit";
@@ -49,13 +49,13 @@ public class AdminController {
 
     @PostMapping("/edit")
     public String editUser(@ModelAttribute("user") User user) {
-        personService.saveUser(user);
+        userService.saveUser(user);
         return "redirect:/admin";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable("id") Long id) {
-        personService.deleteById(id);
+        userService.deleteById(id);
         return "redirect:/admin";
     }
 }
